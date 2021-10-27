@@ -2,7 +2,7 @@
 import numpy as np
 import sys
 import tensorflow as tf
-from tensorflow.examples.tutorials.mnist import input_data
+# from tensorflow.examples.tutorials.mnist import input_data
 
 def conv2(X, k):
     # as a demo code, here we ignore the shape check
@@ -104,8 +104,8 @@ class ConvLayer:
 
 class FCLayer:
     def __init__(self, in_num, out_num, lr = 0.01, momentum=0.9):
-        self._in_num = in_num
-        self._out_num = out_num
+        self.in_num = in_num
+        self.out_num = out_num
         self.w = np.random.randn(in_num, out_num)
         self.b = np.zeros((out_num, 1))
         self.lr = lr
@@ -268,8 +268,8 @@ if __name__ == '__main__':
         return np.array(images), np.array(labels)
 
     # use mnist dataset
-    train_feature_raw, train_label_raw = load_data('train.feat', 'train.label')
-    valid_feature_raw, valid_label_raw = load_data('valid.feat', 'valid.label')
+    # train_feature_raw, train_label_raw = load_data('train.feat', 'train.label')
+    # valid_feature_raw, valid_label_raw = load_data('valid.feat', 'valid.label')
     mnist = input_data.read_data_sets('MNIST_data/', one_hot=False)
     train_feature_raw, train_label_raw, valid_feature_raw, valid_label_raw = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
 

@@ -12,6 +12,26 @@ def conv2(X, k):
             data[y,x] = np.sum(sub * k)
     return data
 
+def padding(in_data, size):
+    cur_r, cur_w = in_data.shape[0], in_data.shape[1]
+    new_r = cur_r + size * 2
+    new_w = cur_w + size * 2
+    ret = np.zeros((new_r, new_w))
+    ret[size:cur_r + size, size:cur_w+size] = in_data
+    return ret
+
+def rot180(in_data):
+    ret = in_data.copy()
+    yEnd = ret.shape[0] - 1
+    xEnd = ret.shape[1] - 1
+    for y in range(ret.shape[0] / 2):
+        for x in range(ret.shape[1]):
+            ret[yEnd - y][x] = ret[y][x]
+    for y in range(ret.shape[0]):
+        for x in range(ret.shape[1] / 2):
+            ret[y][xEnd - x] = ret[y][x]
+    return ret
+
 class ConvolutuionnalLayer(Layer):
     def __init__(self, input_chanel, output_chanel, kernel_size, learing_rate = 0.01, momentum = 0.9):
         self.weight = np.random.randn(input_chanel, output_chanel, kernel_size, kernel_size)
@@ -53,7 +73,7 @@ class ConvolutuionnalLayer(Layer):
         for b_id in range(input_batch):
             for i in range(input_channel):
                 for o in range(output_channel):
-                    gradient_x[b_id, i] += conv2(padding(residual, kernel_size - 1), rot180(self.w[i, o])) #??????
+                    gradient_x[b_id, i] += conv2(padding(residual, kernel_size - 1), rot180(self.weight[i, o])) #??????
         gradient_x /= input_batch
         # update
         self.prev_gradient_w = self.prev_gradient_w * self.momentum - self.gradient_w
@@ -62,4 +82,6 @@ class ConvolutuionnalLayer(Layer):
         self.bias += self.learing_rate * self.prev_gradient_b
         return gradient_x
 
+
+    
         

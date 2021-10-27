@@ -21,9 +21,9 @@ class FCLayer(Layer):
         batch_size = loss.shape[0]
         grad_w = np.dot(self.bottomVal, loss.T) / batch_size
         grad_b = np.sum(loss) / batch_size
-        residual_x = np.dot(self.w, loss)
+        residual_x = np.dot(self.weighs, loss)
         self.prev_grad_w = self.prev_grad_w * self.momentum - grad_w
         self.prev_grad_b = self.prev_grad_b * self.momentum - grad_b
-        self.w -= self.lr * self.prev_grad_w
-        self.b -= self.lr * self.prev_grad_b
+        self.weighs -= self.lr * self.prev_grad_w
+        self.bias -= self.lr * self.prev_grad_b
         return residual_x

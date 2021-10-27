@@ -24,6 +24,6 @@ class FCLayer(Layer):
         residual_x = np.dot(self.weighs, loss)
         self.prev_grad_w = self.prev_grad_w * self.momentum - grad_w
         self.prev_grad_b = self.prev_grad_b * self.momentum - grad_b
-        self.weighs -= self.lr * self.prev_grad_w
-        self.bias -= self.lr * self.prev_grad_b
+        self.weighs -= self.learning_rate * self.prev_grad_w
+        self.bias -= self.learning_rate * self.prev_grad_b
         return residual_x

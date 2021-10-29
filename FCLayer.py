@@ -2,22 +2,28 @@ from layer import Layer
 import numpy as np
 
 class FCLayer(Layer):
-    def __init__(self, input_shape, output_shape):
-        self.input_shape = input_shape
-        self.output_shape = output_shape
-        self.weighs = np.random.rand(input_shape[1], output_shape[1]) - 0.5
-        self.bias = np.random.rand(1, output_shape[1]) - 0.5
+    def __init__(self, input_num, output_num, learning_rate = 0.01, momentum = 0.9):
+        self.input_num = input_num
+        self.output_num = output_num
+        self.weighs = np.random.rand(input_num, output_num)
+        self.bias = np.random.rand(output_num, 1)
+        self.learning_rate = learning_rate
+        self.momentum = momentum
+        self.prev_grad_W = np.zeros_like(self.weighs)
+        self.prev_grad_b = np.zeros_like(self.bias)
     
-    def forward_propagation(self, input):
-        self.input = input
-        self.output = np.dot(self.input, self.weighs) + self.bias
-        return self.output
+    def forward_propagation(self, input_data):
+        self.topVal = np.dot(self.weighs.T, input_data) + self.bias
+        self.bottomVal = input_data
+        return self.topVal
     
-    def backward_propagation(self, output_error, learning_rate):
-        current_layer_err = np.dot(output_error, self.weighs.T)
-        dweight = np.dot(self.input.T, output_error)
-
-        self.weighs -= dweight*learning_rate
-        self.bias -= learning_rate*output_error
-
-        return current_layer_err
+    def backward_propagation(self, loss):
+        batch_size = loss.shape[0]
+        grad_w = np.dot(self.bottomVal, loss.T) / batch_size
+        grad_b = np.sum(loss) / batch_size
+        residual_x = np.dot(self.weighs, loss)
+        self.prev_grad_w = self.prev_grad_w * self.momentum - grad_w
+        self.prev_grad_b = self.prev_grad_b * self.momentum - grad_b
+        self.weighs -= self.learning_rate * self.prev_grad_w
+        self.bias -= self.learning_rate * self.prev_grad_b
+        return residual_x

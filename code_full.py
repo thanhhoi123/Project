@@ -1,8 +1,5 @@
 # port from https://github.com/hsmyy/zhihuzhuanlan
 import numpy as np
-import sys
-import tensorflow as tf
-# from tensorflow.examples.tutorials.mnist import input_data
 
 def conv2(X, k):
     # as a demo code, here we ignore the shape check
@@ -267,11 +264,11 @@ if __name__ == '__main__':
             images[i][:] = image_data[i*rows*cols : (i+1)*rows*cols]
         return np.array(images), np.array(labels)
 
-    # use mnist dataset
-    # train_feature_raw, train_label_raw = load_data('train.feat', 'train.label')
-    # valid_feature_raw, valid_label_raw = load_data('valid.feat', 'valid.label')
-    mnist = input_data.read_data_sets('MNIST_data/', one_hot=False)
-    train_feature_raw, train_label_raw, valid_feature_raw, valid_label_raw = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
+
+    
+    train_feature_raw, train_label_raw = load_data('train.feat', 'train.label')
+    valid_feature_raw, valid_label_raw = load_data('valid.feat', 'valid.label')
+  
 
     train_feature = train_feature_raw.reshape(55000, 1, 28, 28)
     valid_feature = valid_feature_raw.reshape(10000, 1, 28, 28)
